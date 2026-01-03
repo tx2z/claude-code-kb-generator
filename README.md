@@ -55,6 +55,27 @@ your-project/
 └── ...
 ```
 
+## Optional: Optimize for Your Tech Stack
+
+After installation, you can optimize the knowledge base generator for your specific codebase. This produces more relevant documentation by understanding your project's architecture and conventions.
+
+Run this prompt in Claude Code:
+
+```
+I just installed the kb-generator commands in .claude/. Please:
+
+1. Analyze my codebase to detect my tech stack, architecture patterns, and existing documentation
+2. Read the command files in .claude/commands/ and .claude/knowledge-base/agents/
+3. Optimize each KB agent by:
+   - Updating tech-stacks.yaml with my specific framework versions and patterns
+   - Adjusting skill templates to match my project's domain terminology
+   - Configuring documentation structure based on my existing docs organization
+   - Setting complexity thresholds appropriate for my codebase size
+4. Keep the agent structure, two-layer documentation approach, and output format unchanged
+
+Show me what you'll change before applying.
+```
+
 ## Usage
 
 ### Initialize Knowledge Base

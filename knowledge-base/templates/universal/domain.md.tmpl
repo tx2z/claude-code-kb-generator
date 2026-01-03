@@ -1,0 +1,81 @@
+---
+name: {{domain_slug}}-system
+description: {{description}}. Use when working with {{keywords}}.
+key_files:
+{{#each key_files}}
+  - {{this}}
+{{/each}}
+full_docs: {{human_docs_path}}/systems/SYS-{{number}}-{{domain_slug}}.md
+tags: [{{#each tags}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}]
+---
+
+# {{domain_title}} System
+
+## Overview
+
+{{overview}}
+
+## Architecture
+
+```
+{{architecture_diagram}}
+```
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+{{#each key_files_table}}
+| `{{file}}` | {{purpose}} |
+{{/each}}
+
+## Core Flow
+
+{{core_flow_description}}
+
+```{{language}}
+{{core_flow_code}}
+```
+
+## Common Tasks
+
+{{#each common_tasks}}
+### {{task_name}}
+
+```{{../language}}
+{{code}}
+```
+
+{{/each}}
+
+## Gotchas
+
+{{#each gotchas}}
+{{@index_1}}. **{{title}}**: {{description}}
+{{/each}}
+
+## Error Codes
+
+| Code | Translation Key | Description |
+|------|-----------------|-------------|
+{{#each error_codes}}
+| `{{code}}` | `{{key}}` | {{description}} |
+{{/each}}
+
+## Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+{{#each config_options}}
+| `{{name}}` | {{type}} | {{default}} | {{description}} |
+{{/each}}
+
+## Related
+
+{{#each related}}
+- `{{path}}` - {{description}}
+{{/each}}
+
+---
+
+_Full documentation: {{full_docs_path}}_

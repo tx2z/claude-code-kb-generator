@@ -1,0 +1,240 @@
+# KB Generation Thresholds Configuration
+# Controls when to prompt user, analysis depth, and output limits
+
+version: "1.0.0"
+
+# Project size thresholds
+project_size:
+  # File count categories
+  small:
+    max_files: 200
+    estimated_time: "1-3 minutes"
+    domains_expected: 3-5
+    require_confirmation: false
+
+  medium:
+    max_files: 500
+    estimated_time: "3-10 minutes"
+    domains_expected: 5-10
+    require_confirmation: false
+
+  large:
+    max_files: 2000
+    estimated_time: "10-20 minutes"
+    domains_expected: 10-20
+    require_confirmation: true
+    confirmation_message: |
+      Large project detected ({count} files).
+      Deep analysis will take approximately {time}.
+      Continue with full analysis? [Y/n/quick]
+
+  enterprise:
+    max_files: 999999
+    estimated_time: "20-45 minutes"
+    domains_expected: 20+
+    require_confirmation: true
+    confirmation_message: |
+      Very large project detected ({count} files).
+      Full analysis may take {time} or more.
+
+      Options:
+      1. Full analysis (recommended for initial setup)
+      2. Quick analysis (core domains only)
+      3. Selective (choose specific directories)
+
+      Choose [1/2/3]:
+
+# Analysis depth settings
+analysis:
+  # Quick mode - minimal analysis
+  quick:
+    scan_depth: 2  # Directory depth
+    max_files_per_domain: 10
+    pattern_detection: false
+    code_examples: false
+    description: "Fast scan of main directories only"
+
+  # Standard mode - balanced analysis
+  standard:
+    scan_depth: 4
+    max_files_per_domain: 25
+    pattern_detection: true
+    code_examples: true
+    description: "Balanced analysis with pattern detection"
+
+  # Deep mode - comprehensive analysis
+  deep:
+    scan_depth: 10
+    max_files_per_domain: 100
+    pattern_detection: true
+    code_examples: true
+    cross_reference_analysis: true
+    description: "Comprehensive analysis of all code paths"
+
+# When to ask user questions
+user_prompts:
+  # Existing documentation found
+  existing_docs:
+    threshold: 1  # If any existing docs found
+    prompt: |
+      Found existing documentation:
+      {doc_list}
+
+      How should I handle these?
+      1. Integrate into new KB structure (recommended)
+      2. Reference but don't move
+      3. Start fresh (keep existing separate)
+
+  # Human docs location
+  human_docs_location:
+    always_ask: true
+    default: "docs/knowledge_base/"
+    prompt: |
+      Where should human-readable documentation go?
+      1. {default} (recommended)
+      2. Keep in existing: {existing_path}
+      3. Custom location: ___
+
+  # Multiple existing doc systems detected
+  multiple_doc_systems:
+    threshold: 2
+    prompt: |
+      Multiple documentation systems detected:
+      {systems}
+
+      Which should be the primary source of truth?
+
+  # Deep analysis confirmation
+  deep_analysis:
+    file_threshold: 500
+    prompt: |
+      Project has {count} files. Deep analysis includes:
+      - Pattern detection across all files
+      - Code example extraction
+      - Cross-reference analysis
+
+      This will take approximately {time}.
+      Proceed? [Y/n]
+
+# Output limits
+output:
+  # AI Skills
+  skills:
+    max_lines: 500
+    min_lines: 100
+    max_code_examples: 5
+    max_key_files: 15
+    max_gotchas: 7
+
+  # Human docs
+  docs:
+    min_lines: 500
+    max_lines: 3000
+    max_code_examples: 20
+    max_components: 30
+
+  # Reference indexes
+  references:
+    max_entries_per_category: 50
+    max_categories: 10
+
+# Domain detection
+domains:
+  # Minimum files to constitute a domain
+  min_files: 2
+
+  # Maximum domains to detect (suggest grouping beyond this)
+  max_domains: 25
+
+  # Patterns that indicate a domain boundary
+  domain_indicators:
+    - "*Service.ts"
+    - "*Provider.tsx"
+    - "*Controller.ts"
+    - "*Handler.go"
+    - "*Router.py"
+
+  # Directories that should be treated as single domains
+  single_domain_directories:
+    - utils/
+    - helpers/
+    - common/
+    - shared/
+
+# Pattern detection
+patterns:
+  # Minimum occurrences to report a pattern
+  min_occurrences: 3
+
+  # Confidence thresholds
+  confidence:
+    high: 10  # 10+ occurrences
+    medium: 5  # 5-9 occurrences
+    low: 3    # 3-4 occurrences
+
+  # Common patterns to detect
+  detect:
+    - name: ServiceResponse
+      search: "ServiceResponse<"
+      category: patterns
+
+    - name: Context/Provider
+      search: "createContext|useContext"
+      category: patterns
+
+    - name: Custom Hooks
+      search: "^export function use[A-Z]"
+      category: patterns
+
+    - name: Error Boundary
+      search: "componentDidCatch|ErrorBoundary"
+      category: patterns
+
+    - name: Redux
+      search: "createSlice|useSelector|useDispatch"
+      category: state
+
+    - name: Zustand
+      search: "create\\(|useStore"
+      category: state
+
+# Git analysis (for updates)
+git:
+  # Default number of commits to analyze
+  default_commits: 20
+
+  # Maximum commits to analyze
+  max_commits: 100
+
+  # Files to ignore in change analysis
+  ignore_patterns:
+    - "*.lock"
+    - "*.log"
+    - ".env*"
+    - "node_modules/"
+    - "dist/"
+    - "build/"
+    - ".git/"
+
+# Performance settings
+performance:
+  # Parallel agent instances
+  max_parallel_skill_writers: 3
+  max_parallel_doc_writers: 2
+
+  # Timeout per agent (milliseconds)
+  agent_timeout: 300000  # 5 minutes
+
+  # Batch size for file processing
+  file_batch_size: 50
+
+# Caching
+cache:
+  # Cache analysis results
+  enabled: true
+
+  # Cache TTL (hours)
+  ttl: 24
+
+  # Cache location
+  location: ".claude/knowledge-base/.cache/"

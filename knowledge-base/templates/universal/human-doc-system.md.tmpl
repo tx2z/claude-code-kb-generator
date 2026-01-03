@@ -1,0 +1,187 @@
+# {{system_title}} - Technical Specification
+
+## Overview
+
+{{overview}}
+
+## Architecture
+
+### System Diagram
+
+```
+{{architecture_diagram}}
+```
+
+### Key Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+{{#each components}}
+| {{name}} | `{{file}}` | {{purpose}} |
+{{/each}}
+
+### Dependencies
+
+| Dependency | Version | Purpose |
+|------------|---------|---------|
+{{#each dependencies}}
+| {{name}} | {{version}} | {{purpose}} |
+{{/each}}
+
+## Core Flows
+
+{{#each flows}}
+### {{name}}
+
+{{description}}
+
+```
+{{diagram}}
+```
+
+**Implementation:**
+
+```{{../language}}
+{{code}}
+```
+
+{{/each}}
+
+## Implementation Details
+
+{{#each implementation_sections}}
+### {{title}}
+
+{{content}}
+
+{{#if code}}
+```{{../language}}
+{{code}}
+```
+{{/if}}
+
+{{/each}}
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+{{#each env_vars}}
+| `{{name}}` | {{type}} | {{default}} | {{description}} |
+{{/each}}
+
+### Runtime Configuration
+
+```{{language}}
+{{config_code}}
+```
+
+## Error Handling
+
+### Error Codes
+
+| Code | HTTP | Translation Key | Description | Recovery |
+|------|------|-----------------|-------------|----------|
+{{#each errors}}
+| {{code}} | {{http}} | `{{key}}` | {{description}} | {{recovery}} |
+{{/each}}
+
+### Error Flow
+
+```
+{{error_flow_diagram}}
+```
+
+## Testing
+
+### Unit Tests
+
+| Test File | Coverage | Description |
+|-----------|----------|-------------|
+{{#each unit_tests}}
+| `{{file}}` | {{coverage}} | {{description}} |
+{{/each}}
+
+### E2E Tests
+
+| Flow File | Scenario |
+|-----------|----------|
+{{#each e2e_tests}}
+| `{{file}}` | {{scenario}} |
+{{/each}}
+
+### Test Checklist
+
+{{#each test_checklist}}
+- [ ] {{this}}
+{{/each}}
+
+## Performance
+
+### Metrics
+
+| Metric | Target | Current | Notes |
+|--------|--------|---------|-------|
+{{#each metrics}}
+| {{name}} | {{target}} | {{current}} | {{notes}} |
+{{/each}}
+
+### Optimization Notes
+
+{{optimization_notes}}
+
+## Troubleshooting Guide
+
+{{#each troubleshooting}}
+### Problem: {{title}}
+
+- **Symptom**: {{symptom}}
+- **Cause**: {{cause}}
+- **Solution**: {{solution}}
+- **Prevention**: {{prevention}}
+
+{{/each}}
+
+## Migration Notes
+
+### Breaking Changes
+
+| Version | Change | Migration Steps |
+|---------|--------|-----------------|
+{{#each breaking_changes}}
+| {{version}} | {{change}} | {{steps}} |
+{{/each}}
+
+### Deprecations
+
+{{#each deprecations}}
+- `{{old}}` → `{{new}}` (deprecated in {{version}})
+{{/each}}
+
+## Related Systems
+
+| System | Relationship |
+|--------|--------------|
+{{#each related_systems}}
+| [{{name}}]({{link}}) | {{relationship}} |
+{{/each}}
+
+## Changelog
+
+{{#each changelog}}
+### {{date}}: {{title}}
+
+- **Change**: {{change}}
+- **Reason**: {{reason}}
+- **Impact**: {{impact}}
+{{#if pr}}- **PR**: #{{pr}}{{/if}}
+
+{{/each}}
+
+---
+
+_Last Updated: {{updated_date}}_
+_Maintained by: {{maintainer}}_
+_Related Skill: `.claude/skills/domains/{{domain_slug}}.md`_

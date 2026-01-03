@@ -1,0 +1,355 @@
+# Tech Stack Detection Configuration
+# Used by kb-analyzer to identify project technology
+
+version: "1.0.0"
+
+# Detection rules are evaluated in order - first match wins
+stacks:
+  # React Native / Expo
+  react-native-expo:
+    detect:
+      - file: package.json
+        contains: ["expo"]
+      - file: app.json
+        exists: true
+    language: typescript
+    directories:
+      source: [app/, src/, components/, screens/]
+      services: [services/, api/]
+      state: [providers/, contexts/, store/]
+      tests: [__tests__/, __maestro__/]
+      config: [config/]
+    patterns:
+      - name: expo-router
+        detect: { file: app.json, contains: "expo-router" }
+      - name: context-providers
+        detect: { directory: providers/ }
+      - name: service-layer
+        detect: { directory: services/ }
+    domains:
+      - pattern: "services/{name}*.ts"
+        skill: "domains/{name}.md"
+        doc: "systems/SYS-XXX-{name}.md"
+    templates: stacks/react-native-expo/
+
+  react-native:
+    detect:
+      - file: package.json
+        contains: ["react-native"]
+        not_contains: ["expo"]
+    language: typescript
+    directories:
+      source: [src/, app/, components/]
+      services: [services/, api/]
+      state: [store/, redux/, contexts/]
+      tests: [__tests__/]
+      native: [android/, ios/]
+    patterns:
+      - name: redux
+        detect: { file: package.json, contains: "redux" }
+      - name: navigation
+        detect: { file: package.json, contains: "@react-navigation" }
+    templates: stacks/react-native/
+
+  # Next.js
+  nextjs-app:
+    detect:
+      - file: package.json
+        contains: ["next"]
+      - directory: app/
+        exists: true
+    language: typescript
+    directories:
+      source: [app/, src/, components/, lib/]
+      api: [app/api/]
+      tests: [__tests__/, tests/]
+      config: [config/]
+    patterns:
+      - name: app-router
+        detect: { directory: app/ }
+      - name: server-components
+        detect: { file: "app/**/*.tsx", contains: "async function" }
+    domains:
+      - pattern: "app/api/{name}/**"
+        skill: "domains/{name}-api.md"
+        doc: "systems/SYS-XXX-{name}-api.md"
+    templates: stacks/nextjs/
+
+  nextjs-pages:
+    detect:
+      - file: package.json
+        contains: ["next"]
+      - directory: pages/
+        exists: true
+    language: typescript
+    directories:
+      source: [pages/, src/, components/, lib/]
+      api: [pages/api/]
+      tests: [__tests__/, tests/]
+    patterns:
+      - name: pages-router
+        detect: { directory: pages/ }
+    templates: stacks/nextjs/
+
+  # Vue / Nuxt
+  nuxt:
+    detect:
+      - file: package.json
+        contains: ["nuxt"]
+    language: typescript
+    directories:
+      source: [pages/, components/, composables/]
+      api: [server/api/]
+      tests: [tests/]
+    patterns:
+      - name: composition-api
+        detect: { directory: composables/ }
+    templates: stacks/nuxt/
+
+  vue:
+    detect:
+      - file: package.json
+        contains: ["vue"]
+        not_contains: ["nuxt"]
+    language: typescript
+    directories:
+      source: [src/, components/, views/]
+      state: [store/]
+      tests: [tests/]
+    templates: stacks/vue/
+
+  # Python
+  django:
+    detect:
+      - file: requirements.txt
+        contains: ["django", "Django"]
+      - file: pyproject.toml
+        contains: ["django"]
+    language: python
+    directories:
+      source: ["*/"]
+      apps: ["*/models.py"]
+      templates: ["*/templates/"]
+      tests: [tests/, "*/tests/"]
+    patterns:
+      - name: drf
+        detect: { file: requirements.txt, contains: "djangorestframework" }
+      - name: celery
+        detect: { file: requirements.txt, contains: "celery" }
+    domains:
+      - pattern: "{app}/models.py"
+        skill: "domains/{app}.md"
+        doc: "systems/SYS-XXX-{app}.md"
+    templates: stacks/django/
+
+  fastapi:
+    detect:
+      - file: requirements.txt
+        contains: ["fastapi"]
+      - file: pyproject.toml
+        contains: ["fastapi"]
+    language: python
+    directories:
+      source: [app/, src/]
+      routers: [app/routers/, src/routers/]
+      models: [app/models/, src/models/]
+      tests: [tests/]
+    patterns:
+      - name: sqlalchemy
+        detect: { file: requirements.txt, contains: "sqlalchemy" }
+      - name: pydantic
+        detect: { file: requirements.txt, contains: "pydantic" }
+    domains:
+      - pattern: "app/routers/{name}.py"
+        skill: "domains/{name}.md"
+        doc: "systems/SYS-XXX-{name}.md"
+    templates: stacks/fastapi/
+
+  flask:
+    detect:
+      - file: requirements.txt
+        contains: ["flask", "Flask"]
+      - file: pyproject.toml
+        contains: ["flask"]
+    language: python
+    directories:
+      source: [app/, src/]
+      blueprints: [app/blueprints/]
+      templates: [templates/]
+      tests: [tests/]
+    templates: stacks/flask/
+
+  python-generic:
+    detect:
+      - file: pyproject.toml
+        exists: true
+      - file: requirements.txt
+        exists: true
+      - file: setup.py
+        exists: true
+    language: python
+    directories:
+      source: [src/, lib/]
+      tests: [tests/]
+    templates: stacks/python/
+
+  # Go
+  go:
+    detect:
+      - file: go.mod
+        exists: true
+    language: go
+    directories:
+      source: [cmd/, internal/, pkg/]
+      handlers: [internal/handlers/, handlers/]
+      models: [internal/models/, models/]
+      tests: ["*_test.go"]
+    patterns:
+      - name: gin
+        detect: { file: go.mod, contains: "gin-gonic" }
+      - name: echo
+        detect: { file: go.mod, contains: "labstack/echo" }
+      - name: fiber
+        detect: { file: go.mod, contains: "gofiber/fiber" }
+    domains:
+      - pattern: "internal/{name}/"
+        skill: "domains/{name}.md"
+        doc: "systems/SYS-XXX-{name}.md"
+    templates: stacks/go/
+
+  # Rust
+  rust:
+    detect:
+      - file: Cargo.toml
+        exists: true
+    language: rust
+    directories:
+      source: [src/]
+      modules: [src/*/]
+      tests: [tests/]
+    patterns:
+      - name: actix
+        detect: { file: Cargo.toml, contains: "actix-web" }
+      - name: axum
+        detect: { file: Cargo.toml, contains: "axum" }
+      - name: tokio
+        detect: { file: Cargo.toml, contains: "tokio" }
+    templates: stacks/rust/
+
+  # Java / Kotlin
+  spring-boot:
+    detect:
+      - file: pom.xml
+        contains: ["spring-boot"]
+      - file: build.gradle
+        contains: ["spring-boot"]
+    language: java
+    directories:
+      source: [src/main/java/]
+      resources: [src/main/resources/]
+      tests: [src/test/]
+    patterns:
+      - name: jpa
+        detect: { file: pom.xml, contains: "spring-data-jpa" }
+      - name: security
+        detect: { file: pom.xml, contains: "spring-security" }
+    templates: stacks/spring/
+
+  kotlin-multiplatform:
+    detect:
+      - file: build.gradle.kts
+        contains: ["kotlin-multiplatform", "multiplatform"]
+    language: kotlin
+    directories:
+      source: [src/commonMain/, src/androidMain/, src/iosMain/]
+      tests: [src/commonTest/]
+    templates: stacks/kotlin/
+
+  # Node.js (generic)
+  express:
+    detect:
+      - file: package.json
+        contains: ["express"]
+        not_contains: ["next", "react", "vue"]
+    language: typescript
+    directories:
+      source: [src/]
+      routes: [src/routes/, routes/]
+      controllers: [src/controllers/, controllers/]
+      models: [src/models/, models/]
+      tests: [tests/, __tests__/]
+    templates: stacks/express/
+
+  nestjs:
+    detect:
+      - file: package.json
+        contains: ["@nestjs/core"]
+    language: typescript
+    directories:
+      source: [src/]
+      modules: [src/*/]
+      tests: [test/]
+    patterns:
+      - name: typeorm
+        detect: { file: package.json, contains: "@nestjs/typeorm" }
+      - name: prisma
+        detect: { file: package.json, contains: "prisma" }
+    templates: stacks/nestjs/
+
+  nodejs-generic:
+    detect:
+      - file: package.json
+        exists: true
+    language: javascript
+    directories:
+      source: [src/, lib/]
+      tests: [tests/, __tests__/]
+    templates: stacks/nodejs/
+
+# Fallback if no stack detected
+fallback:
+  language: unknown
+  directories:
+    source: [src/, lib/, app/]
+    tests: [tests/, test/]
+  templates: universal/
+
+# Package manager detection
+package_managers:
+  npm:
+    detect: { file: package-lock.json }
+  yarn:
+    detect: { file: yarn.lock }
+  pnpm:
+    detect: { file: pnpm-lock.yaml }
+  pip:
+    detect: { file: requirements.txt }
+  poetry:
+    detect: { file: poetry.lock }
+  cargo:
+    detect: { file: Cargo.lock }
+  go:
+    detect: { file: go.sum }
+  maven:
+    detect: { file: pom.xml }
+  gradle:
+    detect: { file: build.gradle }
+
+# Test framework detection
+test_frameworks:
+  jest:
+    detect: { file: package.json, contains: "jest" }
+  vitest:
+    detect: { file: package.json, contains: "vitest" }
+  pytest:
+    detect: { file: requirements.txt, contains: "pytest" }
+  unittest:
+    detect: { file: "**/*_test.py" }
+  go-test:
+    detect: { file: "**/*_test.go" }
+  cargo-test:
+    detect: { file: Cargo.toml }
+  junit:
+    detect: { file: pom.xml, contains: "junit" }
+  maestro:
+    detect: { directory: __maestro__/ }

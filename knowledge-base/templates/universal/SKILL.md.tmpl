@@ -1,0 +1,115 @@
+# {{project_name}} - Knowledge Base
+
+> AI-optimized documentation for Claude Code
+
+## Quick Navigation
+
+| Category | Description |
+|----------|-------------|
+| [Domains](#domains) | Feature-specific knowledge ({{domain_count}} skills) |
+| [Patterns](#patterns) | Cross-cutting patterns ({{pattern_count}} skills) |
+| [Infrastructure](#infrastructure) | Tools & services ({{infrastructure_count}} skills) |
+| [References](#references) | Quick lookup indexes |
+| [Onboarding](#onboarding) | Getting started guides |
+
+---
+
+## Project Info
+
+| Property | Value |
+|----------|-------|
+| **Stack** | {{tech_stack}} |
+| **Language** | {{language}} |
+| **Framework** | {{framework}} |
+| **Package Manager** | {{package_manager}} |
+| **Test Framework** | {{test_framework}} |
+
+---
+
+## Domains
+
+Feature-specific knowledge for working with different parts of the codebase.
+
+{{#each domains}}
+### {{name}}
+
+`domains/{{slug}}.md` - {{description}}
+
+Key files: {{#each key_files}}`{{this}}`{{#unless @last}}, {{/unless}}{{/each}}
+
+{{/each}}
+
+---
+
+## Patterns
+
+Cross-cutting patterns used throughout the codebase.
+
+{{#each patterns}}
+| Pattern | File | Description |
+|---------|------|-------------|
+| {{name}} | `patterns/{{slug}}.md` | {{description}} |
+{{/each}}
+
+---
+
+## Infrastructure
+
+Tools, services, and external integrations.
+
+{{#each infrastructure}}
+| Service | File | Description |
+|---------|------|-------------|
+| {{name}} | `infrastructure/{{slug}}.md` | {{description}} |
+{{/each}}
+
+---
+
+## References
+
+Quick lookup indexes for finding files and components.
+
+| Reference | File | Entries |
+|-----------|------|---------|
+{{#each references}}
+| {{name}} | `references/{{slug}}.md` | {{count}} items |
+{{/each}}
+
+---
+
+## Onboarding
+
+Getting started guides for new developers.
+
+| Guide | File | Description |
+|-------|------|-------------|
+| Quick Start | `onboarding/quick-start.md` | First-time setup |
+| Architecture | `onboarding/architecture-overview.md` | System design |
+| Common Tasks | `onboarding/common-tasks.md` | Day-to-day operations |
+
+---
+
+## Human Documentation
+
+For comprehensive documentation, see: `{{human_docs_path}}`
+
+| Category | Location |
+|----------|----------|
+| Systems | `{{human_docs_path}}/systems/` |
+| Features | `{{human_docs_path}}/features/` |
+| Integrations | `{{human_docs_path}}/integrations/` |
+| Testing | `{{human_docs_path}}/testing/` |
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/init-kb` | Initialize knowledge base (first-time setup) |
+| `/update-kb [N]` | Update KB from last N commits (default: 20) |
+
+---
+
+_Generated: {{generated_date}}_
+_Version: {{version}}_

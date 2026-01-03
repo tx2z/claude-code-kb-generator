@@ -1,0 +1,42 @@
+---
+name: {{reference_type}}-index
+description: Quick lookup of all {{reference_type}}. Use when finding {{use_case}}.
+type: reference
+tags: [{{reference_type}}, reference, lookup, index]
+---
+
+# {{reference_title}} Index
+
+Total: **{{total_count}}** {{reference_type}}
+
+## By Category
+
+{{#each categories}}
+### {{name}}
+
+| {{../item_name}} | File | Purpose |
+|{{../item_separator}}|------|---------|
+{{#each items}}
+| {{name}} | `{{file}}` | {{purpose}} |
+{{/each}}
+
+{{/each}}
+
+## By Feature
+
+| Feature | {{reference_title}} |
+|---------|{{title_separator}}|
+{{#each by_feature}}
+| {{feature}} | {{#each items}}{{name}}{{#unless @last}}, {{/unless}}{{/each}} |
+{{/each}}
+
+## Alphabetical
+
+{{#each alphabetical}}
+| {{name}} | `{{file}}` | {{brief}} |
+{{/each}}
+
+---
+
+_Last updated: {{updated_date}}_
+_Total entries: {{total_count}}_

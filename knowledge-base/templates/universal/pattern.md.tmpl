@@ -1,0 +1,80 @@
+---
+name: {{pattern_slug}}-pattern
+description: {{description}}. Use when {{use_case}}.
+key_files:
+{{#each key_files}}
+  - {{this}}
+{{/each}}
+tags: [{{#each tags}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}, pattern]
+---
+
+# {{pattern_title}} Pattern
+
+## Overview
+
+{{overview}}
+
+## When to Use
+
+{{when_to_use}}
+
+## Structure
+
+```
+{{structure_diagram}}
+```
+
+## Implementation
+
+### Basic Example
+
+```{{language}}
+{{basic_example}}
+```
+
+### Advanced Example
+
+```{{language}}
+{{advanced_example}}
+```
+
+## Key Principles
+
+{{#each principles}}
+{{@index_1}}. **{{title}}**: {{description}}
+{{/each}}
+
+## Files Using This Pattern
+
+| File | Usage |
+|------|-------|
+{{#each usages}}
+| `{{file}}` | {{description}} |
+{{/each}}
+
+## Anti-Patterns
+
+{{#each anti_patterns}}
+### Don't: {{title}}
+
+```{{../language}}
+// Bad
+{{bad_code}}
+```
+
+```{{../language}}
+// Good
+{{good_code}}
+```
+
+{{/each}}
+
+## Related Patterns
+
+{{#each related}}
+- `patterns/{{slug}}.md` - {{description}}
+{{/each}}
+
+---
+
+_Pattern occurrences: {{occurrence_count}} files_
